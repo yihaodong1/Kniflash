@@ -14,29 +14,31 @@ Role::Role(QGraphicsItem* parent): QGraphicsPixmapItem(parent){
     line = new QGraphicsRectItem(20,-10, 100, 10, this);
     line->setBrush(Qt::red);
 
-    knife_num = 4;
-    for(int i = 0; i < knife_num; i++){
-        QPixmap knifePixmap(":/figs/knife.png");
-        if (knifePixmap.isNull()) {
-            // 时常使用 qDebug 输出调试信息, 是好的开发习惯
-            qDebug() << "Failed to load bush image!";
-        }
-        knifePixmap = knifePixmap.scaled(123, 100);
-        QGraphicsPixmapItem *knifePixmapItem = new QGraphicsPixmapItem(knifePixmap, this);
-        knives.append(knifePixmapItem);
+    status = 0;
+    cloud = new QGraphicsEllipseItem(-10, 100, 30, 30, this);
+    QColor color(150, 147, 147);
+    cloud->setBrush(color);
+    cloud->setPen(QPen(color));
+    cloud->setVisible(false);
+
+    knife_num = 0;
+    for(int i = 0; i < 4; i++){
+        knifeNumAdder();
     }
     angle = 0;
     rotateSpeed = 1;
     m_rotateTimer = new QTimer;
     connect(m_rotateTimer, &QTimer::timeout, this, &Role::updateKnivesRotation);
     m_rotateTimer->start(16);
+    m_knifeaddTimer = new QTimer;
+    connect(m_knifeaddTimer, &QTimer::timeout, this, &Role::updateKnifenum);
+    m_knifeaddTimer->start(1000);
 }
 
 Role::~Role(){
 
 }
 void Role::updateKnivesRotation(){
-    if(knife_num<4)knife_num++;
     angle+=(rotateSpeed/knife_num);
     angle = angle>360?angle-360:angle;
     for(int i = 0; i < knife_num; i++){
@@ -46,6 +48,22 @@ void Role::updateKnivesRotation(){
             120 * (1 + (double)knife_num / 32) * sin(2 * M_PI * ((double)i / knife_num + (double)angle/360)));
     }
 
+}
+void Role::knifeNumAdder(){
+    knife_num++;
+    QPixmap knifePixmap(":/figs/knife.png");
+    if (knifePixmap.isNull()) {
+        // 时常使用 qDebug 输出调试信息, 是好的开发习惯
+        qDebug() << "Failed to load knife image!";
+    }
+    knifePixmap = knifePixmap.scaled(123, 100);
+    QGraphicsPixmapItem *knifePixmapItem = new QGraphicsPixmapItem(knifePixmap, this);
+    knives.append(knifePixmapItem);
+}
+void Role::updateKnifenum(){
+    if(knife_num<4){
+        knifeNumAdder();
+    }
 }
 // void Role::updateHP(){
 //

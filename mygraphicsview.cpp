@@ -172,9 +172,11 @@ void MyGraphicsView::keyReleaseEvent(QKeyEvent *event) {
 }
 void MyGraphicsView::updateGame() {
     for(MyItem* it: items){
-        qreal l = QLineF(it->boundingRect().center() + m_background->pos(), m_role->boundingRect().center()).length();
-        if(l<10){
+        qreal l = QLineF(it->scenePos() + it->boundingRect().center(), 
+            m_role->scenePos() + m_role->boundingRect().center()).length();
+        if(l<50){
             it->setPos(rand()%(int)scene()->width(), rand()%(int)scene()->height());
+            m_role->knifeNumAdder();
         }
     }
 
