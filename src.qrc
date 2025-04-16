@@ -2,5 +2,10 @@
     <qresource prefix="/">
         <file>figs/capoo.gif</file>
         <file>figs/background.jpg</file>
+        <file>figs/bush.png</file>
+        <file>figs/knife.png</file>
+        <file>figs/case.png</file>
+        <file>figs/boots.png</file>
+        <file>figs/heart.png</file>
     </qresource>
 </RCC>

@@ -11,11 +11,15 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    mygraphicsview.cpp
+    mygraphicsview.cpp \
+    role.cpp \
+    myitem.cpp
 
 HEADERS += \
     mainwindow.h \
-    mygraphicsview.h
+    mygraphicsview.h \
+    role.h \
+    myitem.h
 
 FORMS += \
     mainwindow.ui

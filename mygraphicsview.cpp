@@ -115,6 +115,16 @@ MyGraphicsView::MyGraphicsView(QGraphicsScene *scene, QWidget *parent)
         // scene->addItem(items[i]);
         items[i]->setPos(rand()%(int)scene->width(), rand()%(int)scene->height());
     }
+    for(int i = 10; i < 13; i++){
+        items.push_back(new MyItem(MyItem::SPEED, m_background));
+        // scene->addItem(items[i]);
+        items[i]->setPos(rand()%(int)scene->width(), rand()%(int)scene->height());
+    }
+    for(int i = 13; i < 16; i++){
+        items.push_back(new MyItem(MyItem::HP, m_background));
+        // scene->addItem(items[i]);
+        items[i]->setPos(rand()%(int)scene->width(), rand()%(int)scene->height());
+    }
     // 加载人物 GIF
     m_movie = new QMovie(":/figs/capoo.gif");
     if (!m_movie->isValid()) {
@@ -175,8 +185,22 @@ void MyGraphicsView::updateGame() {
         qreal l = QLineF(it->scenePos() + it->boundingRect().center(), 
             m_role->scenePos() + m_role->boundingRect().center()).length();
         if(l<50){
-            it->setPos(rand()%(int)scene()->width(), rand()%(int)scene()->height());
-            m_role->knifeNumAdder();
+            switch(it->getKind()){
+                case MyItem::KNIFE:
+                    it->setPos(rand()%(int)scene()->width(), rand()%(int)scene()->height());
+                    m_role->knifeNumAdder();
+                    break;
+                case MyItem::SPEED:
+                    items.removeAll(it);
+                    delete it;
+                    m_role->speedUp();
+                    break;
+                case MyItem::HP:
+                    items.removeAll(it);
+                    delete it;
+                    m_role->hpAdder();
+                    break;
+            }
         }
     }
 

@@ -1,4 +1,5 @@
 #include "role.h"
+#include "myitem.h"
 Role::Role(QGraphicsItem* parent): QGraphicsPixmapItem(parent){
     m_movie = new QMovie(":/figs/capoo.gif");
     if (!m_movie->isValid()) {
@@ -33,10 +34,40 @@ Role::Role(QGraphicsItem* parent): QGraphicsPixmapItem(parent){
     m_knifeaddTimer = new QTimer;
     connect(m_knifeaddTimer, &QTimer::timeout, this, &Role::updateKnifenum);
     m_knifeaddTimer->start(1000);
+    m_speedUpTimer = new QTimer;
+    connect(m_speedUpTimer, &QTimer::timeout, this, &Role::updateSpeedUpCount);
+
+    const int speed_radius = 50;
+    path = new QGraphicsPathItem(this);
+    path->setPen(QPen(Qt::green, 6));
+    path->setPos(this->boundingRect().width() / 2 - speed_radius, this->boundingRect().height());
+    QPainterPath painter;
+    painter.moveTo(speed_radius, 0);
+    painter.arcTo(0, 0, 2 * speed_radius, 2 * speed_radius, 90, 360);
+    path->setPath(painter);
+    path->setVisible(false);
+    new MyItem(MyItem::SPEED, path);
 }
 
 Role::~Role(){
 
+}
+void Role::updateSpeedUpCount(){
+    qDebug()<<speedUpCount;
+    speedUpCount--;
+    const int speed_radius = 50;
+    QPainterPath painter;
+    painter.moveTo(speed_radius, 0);
+    painter.arcTo(0, 0, 2 * speed_radius, 2 * speed_radius, 90, 72 * speedUpCount);
+    path->setPath(painter);
+
+    if(speedUpCount == 0){
+        m_speedUpTimer->stop();
+        step = 10;
+        path->setVisible(false);
+    }else if(speedUpCount < 0){
+        qDebug()<<"error";
+    }
 }
 void Role::updateKnivesRotation(){
     angle+=(rotateSpeed/knife_num);

@@ -22,11 +22,26 @@ MyItem::MyItem(enum KIND k, QGraphicsItem* parent ): QGraphicsPixmapItem(parent)
             // knifePixmapItem->setPos(this->boundingRect().center());
             break;
         }
-        case SPEED:
+        case SPEED:{
+            QPixmap bootsPixmap(":/figs/boots.png");
+            if (bootsPixmap.isNull()) {
+                qDebug() << "Failed to load boots image!";
+            }
+            bootsPixmap = bootsPixmap.scaled(100, 100);
+            setPixmap(bootsPixmap);
+            break;
+        }
         break;
-        case HP:
+        case HP:{
+            QPixmap heartPixmap(":/figs/heart.png");
+            if (heartPixmap.isNull()) {
+                qDebug() << "Failed to load boots image!";
+            }
+            heartPixmap = heartPixmap.scaled(100, 100);
+            setPixmap(heartPixmap);
+            break;
+        }
         break;
 
     }
-    setZValue(100);
 }
