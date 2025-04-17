@@ -1,5 +1,4 @@
 #include "mygraphicsview.h"
-#include "role.h"
 
 #include <QDebug>
 #include <QGraphicsPixmapItem>
@@ -143,7 +142,14 @@ MyGraphicsView::MyGraphicsView(QGraphicsScene *scene, QWidget *parent)
 
     // 居中显示人物
     centerOn(m_role);
+
+    for(int i = 0; i < 5; i++){
+        npcs.push_back(new Npc(m_background));
+        npcs[i]->setPos(rand()%(int)scene->width(), rand()%(int)scene->height());
+        // npcs[i]->setPos(m_background->boundingRect().center());
+    }
 }
+
 
 void MyGraphicsView::keyPressEvent(QKeyEvent *event) {
     switch (event->key()) {
@@ -180,28 +186,34 @@ void MyGraphicsView::keyReleaseEvent(QKeyEvent *event) {
     }
     this->m_role->setStatus(w_pressed | a_pressed | s_pressed | d_pressed);
 }
-void MyGraphicsView::updateGame() {
+void MyGraphicsView::freshItem(Character *c){
     for(MyItem* it: items){
         qreal l = QLineF(it->scenePos() + it->boundingRect().center(), 
-            m_role->scenePos() + m_role->boundingRect().center()).length();
+            c->scenePos() + c->boundingRect().center()).length();
         if(l<50){
             switch(it->getKind()){
                 case MyItem::KNIFE:
                     it->setPos(rand()%(int)scene()->width(), rand()%(int)scene()->height());
-                    m_role->knifeNumAdder();
+                    c->knifeNumAdder();
                     break;
                 case MyItem::SPEED:
                     items.removeAll(it);
                     delete it;
-                    m_role->speedUp();
+                    c->speedUp();
                     break;
                 case MyItem::HP:
                     items.removeAll(it);
                     delete it;
-                    m_role->hpAdder();
+                    c->hpAdder();
                     break;
             }
         }
+    }
+}
+void MyGraphicsView::updateGame() {
+    freshItem(m_role);
+    for(auto npc: npcs){
+        freshItem(npc);
     }
 
     const double step = m_role->getStep();

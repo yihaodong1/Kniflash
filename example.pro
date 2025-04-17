@@ -13,13 +13,17 @@ SOURCES += \
     mainwindow.cpp \
     mygraphicsview.cpp \
     role.cpp \
-    myitem.cpp
+    myitem.cpp \
+    character.cpp \
+    npc.cpp
 
 HEADERS += \
     mainwindow.h \
     mygraphicsview.h \
     role.h \
-    myitem.h
+    myitem.h \
+    character.h \
+    npc.h
 
 FORMS += \
     mainwindow.ui

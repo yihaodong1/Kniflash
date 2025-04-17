@@ -7,5 +7,6 @@
         <file>figs/case.png</file>
         <file>figs/boots.png</file>
         <file>figs/heart.png</file>
+        <file>figs/slime.png</file>
     </qresource>
 </RCC>

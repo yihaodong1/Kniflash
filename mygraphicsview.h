@@ -11,9 +11,12 @@
 #include <QList>
 #include "role.h"
 #include "myitem.h"
+#include "npc.h"
 
 class MyGraphicsView : public QGraphicsView {
 private:
+    void freshItem(Character *c);
+    QList<Npc*> npcs;
     QList<MyItem*> items;
     std::vector<QGraphicsPixmapItem*> bushes;            // 草丛
     Role *m_role;
@@ -41,6 +44,7 @@ public slots:
 public:
     explicit MyGraphicsView(QGraphicsScene *scene, QWidget *parent = nullptr);
     void updateGame();
+    void updateNpc();
 
 protected:
     // 键盘事件, 用来移动背景
