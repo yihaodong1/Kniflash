@@ -14,45 +14,6 @@
 // 槽函数: 处理信号, 展示游戏窗口
 void MyGraphicsView::handleEvokeGameSignal() { this->show(); }
 
-// 槽函数: 更新运动圆形的路径
-// void MyGraphicsView::updateCirclePath() {
-//     // 沿正方形轨迹移动
-//     // 这里用的是什么坐标系?
-//     const int speed = 3;
-//     QPointF localPos = m_moving_circle->pos() - initPoint;
-//
-//     switch (currentEdge) {
-//         case 0:  // 上边向右移动
-//             localPos.rx() += speed;
-//             if (localPos.x() > SQUARE_SIZE / 2) {
-//                 localPos.rx() = SQUARE_SIZE / 2;
-//                 currentEdge = 1;
-//             }
-//             break;
-//         case 1:  // 右边向下移动
-//             localPos.ry() += speed;
-//             if (localPos.y() > SQUARE_SIZE / 2) {
-//                 localPos.ry() = SQUARE_SIZE / 2;
-//                 currentEdge = 2;
-//             }
-//             break;
-//         case 2:  // 下边向左移动
-//             localPos.rx() -= speed;
-//             if (localPos.x() < -SQUARE_SIZE / 2) {
-//                 localPos.rx() = -SQUARE_SIZE / 2;
-//                 currentEdge = 3;
-//             }
-//             break;
-//         case 3:  // 左边向上移动
-//             localPos.ry() -= speed;
-//             if (localPos.y() < -SQUARE_SIZE / 2) {
-//                 localPos.ry() = -SQUARE_SIZE / 2;
-//                 currentEdge = 0;
-//             }
-//             break;
-//     }
-//     m_moving_circle->setPos(localPos + initPoint);
-// }
 
 MyGraphicsView::MyGraphicsView(QGraphicsScene *scene, QWidget *parent)
     : QGraphicsView(scene, parent) {
@@ -146,7 +107,7 @@ MyGraphicsView::MyGraphicsView(QGraphicsScene *scene, QWidget *parent)
     for(int i = 0; i < 5; i++){
         npcs.push_back(new Npc(m_background));
         npcs[i]->setPos(rand()%(int)scene->width(), rand()%(int)scene->height());
-        // npcs[i]->setPos(m_background->boundingRect().center());
+        npcs[i]->setPos(m_background->boundingRect().center());
     }
 }
 
@@ -186,6 +147,31 @@ void MyGraphicsView::keyReleaseEvent(QKeyEvent *event) {
     }
     this->m_role->setStatus(w_pressed | a_pressed | s_pressed | d_pressed);
 }
+
+void MyGraphicsView::mousePressEvent(QMouseEvent *event){
+    if(m_role->getKnifeNum() > 0){
+        m_role->useKnife();
+        qreal min = QLineF(m_role->boundingRect().center(), 
+                npcs[0]->boundingRect().center()).length();
+        Npc *near_npc = npcs[0];
+        for(auto npc: npcs){
+            qreal l = QLineF(m_role->boundingRect().center(), 
+                npc->boundingRect().center()).length();
+            if(l < min){
+                min = l;
+                near_npc = npc;
+            }
+        }
+        if(min < 50){
+            if(near_npc->getKnifeNum() > 0)
+                near_npc->useKnife();
+            else
+                near_npc->bleed();
+        }
+    }
+    QGraphicsView::mousePressEvent(event);
+}
+
 void MyGraphicsView::freshItem(Character *c){
     for(MyItem* it: items){
         qreal l = QLineF(it->scenePos() + it->boundingRect().center(), 

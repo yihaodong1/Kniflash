@@ -9,6 +9,7 @@
 #include <QMovie>
 #include <QTimer>
 #include <QList>
+#include <QGraphicsSceneMouseEvent>
 #include "role.h"
 #include "myitem.h"
 #include "npc.h"
@@ -51,6 +52,7 @@ protected:
     // 注意 override
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
 };
 
 #endif  // MYGRAPHICSVIEW_H

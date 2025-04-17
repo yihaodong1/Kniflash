@@ -8,7 +8,7 @@ Character::Character(QGraphicsItem* parent): QGraphicsPixmapItem(parent){
     for(int i = 0; i < 4; i++){
         knifeNumAdder();
     }
-    angle = 0;
+    angle = rand()%360;
     rotateSpeed = 1;
     connect(&m_rotateTimer, &QTimer::timeout, this, &Character::updateKnivesRotation);
     m_rotateTimer.start(16);
@@ -33,7 +33,6 @@ Character::~Character(){
 }
 
 void Character::updateSpeedUpCount(){
-    qDebug()<<speedUpCount;
     speedUpCount--;
     const int speed_radius = 50;
     QPainterPath painter;
@@ -53,19 +52,18 @@ void Character::updateSpeedUpCount(){
 }
 
 void Character::updateKnivesRotation(){
-    angle+=(rotateSpeed/knife_num);
+    angle = knife_num != 0? angle+(rotateSpeed/knife_num):angle;// NOTE: avoid to divide zero!!!!
     angle = angle>360?angle-360:angle;
     for(int i = 0; i < knife_num; i++){
         knives[i]->setTransformOriginPoint(knives[i]->boundingRect().center());
         knives[i]->setRotation(i * 360 / knife_num + angle);
-        knives[i]->setPos(120*(1+(double)knife_num / 32) * cos(2 * M_PI * ((double)i / knife_num + double(angle)/360)), 
-            120 * (1 + (double)knife_num / 32) * sin(2 * M_PI * ((double)i / knife_num + (double)angle/360)));
+        knives[i]->setPos(60*(1+(double)knife_num / 8) * cos(2 * M_PI * ((double)i / knife_num + double(angle)/360)), 
+            60 * (1 + (double)knife_num / 8) * sin(2 * M_PI * ((double)i / knife_num + (double)angle/360)));
     }
 
 }
 
 void Character::knifeNumAdder(){
-    knife_num++;
     QPixmap knifePixmap(":/figs/knife.png");
     if (knifePixmap.isNull()) {
         // 时常使用 qDebug 输出调试信息, 是好的开发习惯
@@ -73,7 +71,9 @@ void Character::knifeNumAdder(){
     }
     knifePixmap = knifePixmap.scaled(123, 100);
     QGraphicsPixmapItem *knifePixmapItem = new QGraphicsPixmapItem(knifePixmap, this);
-    knives.append(knifePixmapItem);
+    knifePixmapItem->setPos(rand()%100, rand()%100);
+    knives.push_back(knifePixmapItem);
+    knife_num++;
 }
 
 void Character::updateKnifenum(){

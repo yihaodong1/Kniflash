@@ -49,6 +49,9 @@ public:
         speedUpCount = 5;
     }
     void hpAdder(){hp = (hp + 5) >= 100? 100: hp + 5;}
+    int getKnifeNum(){return knife_num;}
+    void useKnife(){knife_num--;delete knives[0]; knives.pop_front();}
+    void bleed(){hp-=5;}
 // public slots:
 //     void updateHP();
 };
