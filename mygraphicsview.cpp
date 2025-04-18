@@ -72,17 +72,14 @@ MyGraphicsView::MyGraphicsView(QGraphicsScene *scene, QWidget *parent)
 
     for(int i = 0; i < 10; i++){
         items.push_back(new MyItem(MyItem::KNIFE, m_background));
-        // scene->addItem(items[i]);
         items[i]->setPos(rand()%(int)scene->width(), rand()%(int)scene->height());
     }
     for(int i = 10; i < 13; i++){
         items.push_back(new MyItem(MyItem::SPEED, m_background));
-        // scene->addItem(items[i]);
         items[i]->setPos(rand()%(int)scene->width(), rand()%(int)scene->height());
     }
     for(int i = 13; i < 16; i++){
         items.push_back(new MyItem(MyItem::HP, m_background));
-        // scene->addItem(items[i]);
         items[i]->setPos(rand()%(int)scene->width(), rand()%(int)scene->height());
     }
     // 加载人物 GIF
@@ -107,7 +104,6 @@ MyGraphicsView::MyGraphicsView(QGraphicsScene *scene, QWidget *parent)
     for(int i = 0; i < 5; i++){
         npcs.push_back(new Npc(m_background));
         npcs[i]->setPos(rand()%(int)scene->width(), rand()%(int)scene->height());
-        npcs[i]->setPos(m_background->boundingRect().center());
     }
 }
 
@@ -151,18 +147,19 @@ void MyGraphicsView::keyReleaseEvent(QKeyEvent *event) {
 void MyGraphicsView::mousePressEvent(QMouseEvent *event){
     if(m_role->getKnifeNum() > 0){
         m_role->useKnife();
-        qreal min = QLineF(m_role->boundingRect().center(), 
-                npcs[0]->boundingRect().center()).length();
+        qreal min = QLineF(m_role->scenePos()+m_role->boundingRect().center(), 
+                npcs[0]->scenePos() + npcs[0]->boundingRect().center()).length();
         Npc *near_npc = npcs[0];
         for(auto npc: npcs){
-            qreal l = QLineF(m_role->boundingRect().center(), 
-                npc->boundingRect().center()).length();
+            qreal l = QLineF(m_role->scenePos() + m_role->boundingRect().center(), 
+                npc->scenePos() + npc->boundingRect().center()).length();
             if(l < min){
                 min = l;
                 near_npc = npc;
             }
         }
-        if(min < 50){
+        if(min < 300){
+            near_npc->beAttack();
             if(near_npc->getKnifeNum() > 0)
                 near_npc->useKnife();
             else
@@ -204,56 +201,25 @@ void MyGraphicsView::updateGame() {
 
     const double step = m_role->getStep();
     const int bgsize = 1800;
-    double centerx = bgsize / 2 + m_background->pos().x();
-    double centery = bgsize / 2 + m_background->pos().y();
-    double x = m_role->pos().x();
-    double y = m_role->pos().y();
-    if(x>=centerx && y>=centery){
-        x += m_movie->scaledSize().width();
-        y += m_movie->scaledSize().height();
-    }else if(x <= centerx && y >= centery){
-        y += m_movie->scaledSize().height();
-    }else if(x >= centerx && y <= centery){
-        x += m_movie->scaledSize().width();
-    }
+    QPointF ds = QPointF(1, 0);
     if(w_pressed){
-        if((x - centerx) * (x - centerx) + 
-            (y - step - centery)* (y - step - centery)
-            < (bgsize / 2)*(bgsize / 2)){
-            m_background->moveBy(0, step);
-            for(auto it: bushes){
-                it->moveBy(0, step);
-            }
-        }
+        ds += QPointF(0, step);
     }
     if(s_pressed){
-        if((x - centerx) * (x - centerx) + 
-            (y + step - centery)* (y + step - centery)
-            < (bgsize / 2)*(bgsize / 2)){
-            m_background->moveBy(0, -step);
-            for(auto it: bushes){
-                it->moveBy(0, -step);
-            }
-        }
+        ds += QPointF(0, -step);
     }
     if(a_pressed){
-        if((x - step - centerx) * (x - step - centerx) + 
-            (y - centery)* (y - centery)
-            < (bgsize / 2)*(bgsize / 2)){
-            m_background->moveBy(step, 0);
-            for(auto it: bushes){
-                it->moveBy(step, 0);
-            }
-        }
+        ds += QPointF(step, 0);
     }
     if(d_pressed){
-        if((x + step - centerx) * (x + step - centerx) + 
-            (y - centery)* (y - centery)
-            < (bgsize / 2)*(bgsize / 2)){
-            m_background->moveBy(-step, 0);
-            for(auto it: bushes){
-                it->moveBy(-step, 0);
-            }
+        ds += QPointF(-step, 0);
+    }
+    qreal distance = QLineF(m_background->scenePos()+m_background->boundingRect().center() + ds,
+        m_role->scenePos() + m_role->boundingRect().center()).length();
+    if(distance < bgsize / 2){
+        m_background->moveBy(ds.x(), ds.y());
+        for(auto it: bushes){
+            it->moveBy(ds.x(), ds.y());
         }
     }
     centerOn(m_role);  // 强制视图始终居中显示角色

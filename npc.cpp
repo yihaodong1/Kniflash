@@ -14,6 +14,11 @@ Npc::Npc(QGraphicsItem* parent): Character(parent){
     dir = rand()%4;
     connect(&m_dirTimer, &QTimer::timeout, this, &Npc::updateDir);
     m_dirTimer.start(1000);
+
+    beattack = new QGraphicsEllipseItem(0, 80, 120, 40, this);
+    beattack->setPen(QPen(Qt::red, 6));
+    beattack->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
+    beattack->setVisible(false);
 }
 Npc::~Npc(){}
 enum{

@@ -1,8 +1,8 @@
 #include "character.h"
 Character::Character(QGraphicsItem* parent): QGraphicsPixmapItem(parent){
     hp = 100;
-    line = new QGraphicsRectItem(20,-10, 100, 10, this);
-    line->setBrush(Qt::red);
+    line = new HealthBar(100, 10, this);
+    line->setPos(20, -10);
 
     knife_num = 0;
     for(int i = 0; i < 4; i++){
