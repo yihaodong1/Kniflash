@@ -1,6 +1,6 @@
 #include "character.h"
-Character::Character(QGraphicsItem* parent): QGraphicsPixmapItem(parent){
-    hp = 100;
+Character::Character(QGraphicsItem* parent): QObject(), QGraphicsPixmapItem(parent){
+    kills = 0;
     line = new HealthBar(100, 10, this);
     line->setPos(20, -10);
 
@@ -79,5 +79,48 @@ void Character::knifeNumAdder(){
 void Character::updateKnifenum(){
     if(knife_num<4){
         knifeNumAdder();
+    }
+}
+
+void Character::closeAttack(Character *other, int &total){
+    if(this->getKnifeNum() > other->getKnifeNum()){
+        if(other->getKnifeNum() <= total){
+            int used = qMin(total, this->getKnifeNum());
+            other->bleed(used - other->getKnifeNum());
+            other->useKnife(other->getKnifeNum());
+            this->useKnife(used);
+            total -= used;
+        }else{
+            other->useKnife(total);
+            this->useKnife(total);
+            total = 0;
+        }
+    }else{
+        if(this->getKnifeNum() <= total){
+            int used = qMin(total, other->getKnifeNum());
+            this->bleed(used - this->getKnifeNum());
+            this->useKnife(this->getKnifeNum());
+            other->useKnife(used);
+            total -= used;
+        }else{
+            other->useKnife(total);
+            this->useKnife(total);
+            total = 0;
+        }
+    }
+}
+
+void Character::rangedAttack(Character *other){
+    if(this->getKnifeNum() > 0 && other->getKnifeNum() > 0){
+        this->useKnife(1);
+        other->useKnife(1);
+    }else if(this->getKnifeNum() > 0 && other->getKnifeNum() == 0){
+        this->useKnife(1);
+        other->bleed(1);
+    }else if(other->getKnifeNum() > 0 && this->getKnifeNum() == 0){
+        other->useKnife(1);
+        this->bleed(1);
+    }else if(other->getKnifeNum() < 0 || this->getKnifeNum() < 0){
+        assert(0);
     }
 }

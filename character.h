@@ -1,5 +1,6 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
+#include <cassert>
 #include <QDebug>
 #include <QGraphicsRectItem>
 #include <QGraphicsEllipseItem>
@@ -70,8 +71,8 @@ protected:
 
     QTimer m_rotateTimer;
     QTimer m_knifeaddTimer;
+    int kills;
     int knife_num;// 周围的飞刀数
-    int hp = 100;// health point血量值
     double step = 10;// 运动速度
     double angle;// 旋转角度
     double rotateSpeed;// 旋转速度
@@ -96,10 +97,21 @@ public:
         m_speedUpTimer.start(1000);
         speedUpCount = 5;
     }
+    int getHP(){return line->getHealth();}
     void hpAdder(){line->setHealth(line->getHealth()+5);}
     int getKnifeNum(){return knife_num;}
-    void useKnife(){knife_num--;delete knives[0]; knives.pop_front();}
-    void bleed(){line->setHealth(line->getHealth()-25);}
+    void useKnife(int n = 1){
+        knife_num-=n;
+        for(int i = 0; i < n; i++){
+            delete knives[0];
+            knives.pop_front();
+        }
+    }
+    void bleed(int n = 1){line->setHealth(line->getHealth()- n * 25);}
+    void closeAttack(Character *other, int &total);
+    void rangedAttack(Character *other);
+    void killed(){kills++;}
+    int getKills(){return kills;}
 // public slots:
 //     void updateHP();
 };

@@ -25,18 +25,24 @@ enum{
     UP, DOWN, LEFT, RIGHT
 };
 void Npc::updatePos(){
+    QPointF ds(0, 0);
     switch(dir){
       case UP:
-          this->setPos(this->pos() + QPoint(0, -step));
+          ds = QPoint(0, -step);
           break;
       case DOWN:
-          this->setPos(this->pos() + QPoint(0, step));
+          ds = QPoint(0, step);
           break;
       case LEFT:
-          this->setPos(this->pos() + QPoint(-step, 0));
+          ds = QPoint(-step, 0);
           break;
       case RIGHT:
-          this->setPos(this->pos() + QPoint(step, 0));
+          ds = QPoint(step, 0);
           break;
+    }
+    qreal distance = QLineF(parentItem()->scenePos()+parentItem()->boundingRect().center(),
+        this->scenePos() + this->boundingRect().center() + ds).length();
+    if(distance < 1800 / 2){
+        this->setPos(this->pos() + ds);
     }
 }
