@@ -16,6 +16,7 @@
 #include "npc.h"
 
 class MyGraphicsView : public QGraphicsView {
+    Q_OBJECT
 private:
     void freshItem(Character *c);
     QList<Npc*> npcs;// 人机
@@ -46,7 +47,7 @@ public slots:
     void handleEvokeGameSignal();
 
     // 更新运动圆形的路径
-    void updateCirclePath();
+    // void updateCirclePath();
 
 public:
     explicit MyGraphicsView(QGraphicsScene *scene, QWidget *parent = nullptr);
@@ -61,6 +62,8 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
+signals:
+    void showBtnToMenu();
 };
 
 #endif  // MYGRAPHICSVIEW_H

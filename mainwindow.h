@@ -2,6 +2,20 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QStackedWidget>
+#include <QVBoxLayout>
+#include <QStackedLayout>
+#include <QtCore/QVariant>
+#include <QtGui/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTextBrowser>
+#include <QtWidgets/QWidget>
+#include "mygraphicsview.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -31,8 +45,11 @@ signals:
 
 private slots:
     void on_pushButton_clicked();
+    void handleShowBtnToMenu();
 
 private:
+    QStackedWidget *stack;
     Ui::MainWindow *ui;
+    QPushButton *btnToMenu;
 };
 #endif // MAINWINDOW_H

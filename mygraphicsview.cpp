@@ -329,6 +329,7 @@ void MyGraphicsView::updateGame() {
         m_closeAttackTimer.stop();
         m_npcRangedAttackTimer.stop();
         m_update.stop();
+        emit showBtnToMenu();
 
     }
     if(m_role->getHP() <= 0){
@@ -344,6 +345,7 @@ void MyGraphicsView::updateGame() {
         m_closeAttackTimer.stop();
         m_npcRangedAttackTimer.stop();
         m_update.stop();
+        emit showBtnToMenu();
     }
 
 
