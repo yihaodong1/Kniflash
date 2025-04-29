@@ -98,6 +98,7 @@ void Character::closeAttack(Character *other, int &total){
     }else{
         if(this->getKnifeNum() <= total){
             int used = qMin(total, other->getKnifeNum());
+            // qDebug()<<used<<other->getKnifeNum();
             this->bleed(used - this->getKnifeNum());
             this->useKnife(this->getKnifeNum());
             other->useKnife(used);
