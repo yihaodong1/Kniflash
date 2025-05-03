@@ -8,6 +8,13 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     // , ui(new Ui::MainWindow)
 {
+    QMediaPlayer *player = new QMediaPlayer(this);
+    QAudioOutput *audioOutput = new QAudioOutput(this);
+    player->setAudioOutput(audioOutput);
+    player->setSource(QUrl("qrc:/musics/background.mp3"));
+    player->setLoops(QMediaPlayer::Infinite);
+    audioOutput->setVolume(0.1);
+    player->play();
     stack = new QStackedWidget(this);
     stack->setFixedSize(1080, 675);
 

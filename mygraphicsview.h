@@ -11,13 +11,17 @@
 #include <QList>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsLineItem>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 #include "role.h"
 #include "myitem.h"
 #include "npc.h"
 
+enum MUSIC_TYPE { BGM, CLASH, DEATH, WIN, PICKUP };// 音乐类型
 class MyGraphicsView : public QGraphicsView {
     Q_OBJECT
 private:
+    void playMusic(enum MUSIC_TYPE type);
     void freshItem(Character *c);
     QList<Npc*> npcs;// 人机
     QList<MyItem*> items;// 道具

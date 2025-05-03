@@ -14,6 +14,32 @@
 #include <cfloat>
 
 // 槽函数: 处理信号, 展示游戏窗口
+void MyGraphicsView::playMusic(enum MUSIC_TYPE type){
+    QMediaPlayer *player = new QMediaPlayer(this);
+    QAudioOutput *audioOutput = new QAudioOutput(this);
+    player->setAudioOutput(audioOutput);
+    switch(type){
+        case BGM:
+            player->setSource(QUrl("qrc:/musics/background.mp3"));
+            audioOutput->setVolume(0.1);
+            break;
+        case CLASH:
+            player->setSource(QUrl("qrc:/musics/clash.mp3"));
+            audioOutput->setVolume(0.1);
+            break;
+        case DEATH:
+            player->setSource(QUrl("qrc:/musics/death.mp3"));
+            audioOutput->setVolume(1);
+            break;
+        case PICKUP:
+            player->setSource(QUrl("qrc:/musics/pickup.mp3"));
+            audioOutput->setVolume(0.1);
+            break;
+        case WIN:
+            break;
+    }
+    player->play();
+}
 void MyGraphicsView::handleEvokeGameSignal() { this->show(); }
 
 
@@ -154,6 +180,7 @@ void MyGraphicsView::checkCloseAttack(){
         qreal l = QLineF(m_role->scenePos() + m_role->boundingRect().center(), 
             npc->scenePos() + npc->boundingRect().center()).length();
         if(l < 200){
+            playMusic(CLASH);
             m_role->closeAttack(npc, total);
             if(npc->getHP()<=0){
                 m_role->killed();
@@ -262,6 +289,7 @@ void MyGraphicsView::freshItem(Character *c){
         qreal l = QLineF(it->scenePos() + it->boundingRect().center(), 
             c->scenePos() + c->boundingRect().center()).length();
         if(l<50){
+            playMusic(PICKUP);
             switch(it->getKind()){
                 case MyItem::KNIFE:
                     it->setPos(scene()->width() / 2 + sqrt(rand()%(radius*radius)) * cos(rand()%100 / (double)100 * M_PI * 2),
@@ -316,6 +344,7 @@ void MyGraphicsView::updateGame() {
         trace->setLine(QLineF(m_role->scenePos()+m_role->boundingRect().center(),
               near_npc->scenePos() + near_npc->boundingRect().center()));
     else{
+        playMusic(DEATH);
         trace->setVisible(false);
         QGraphicsTextItem* textItem = scene()->addText(QString(
               "Rank: #1/6\nKills：%1\nSurvive Time: %2s").
@@ -333,6 +362,7 @@ void MyGraphicsView::updateGame() {
 
     }
     if(m_role->getHP() <= 0){
+        playMusic(DEATH);
         QGraphicsTextItem* textItem = scene()->addText(QString(
               "Rank: #%1/6\nKills：%2\nSurvive Time: %3s").
             arg(npcs.size()+1).arg(m_role->getKills()).arg(totalseconds));

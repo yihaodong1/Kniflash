@@ -99,6 +99,14 @@ void Character::closeAttack(Character *other, int &total){
         if(this->getKnifeNum() <= total){
             int used = qMin(total, other->getKnifeNum());
             // qDebug()<<used<<other->getKnifeNum();
+            if(used > this->getKnifeNum()){
+                QMediaPlayer *player = new QMediaPlayer(this);
+                QAudioOutput *audioOutput = new QAudioOutput(this);
+                player->setAudioOutput(audioOutput);
+                audioOutput->setVolume(1);
+                player->setSource(QUrl("qrc:/musics/hurt.mp3"));
+                player->play();
+            }
             this->bleed(used - this->getKnifeNum());
             this->useKnife(this->getKnifeNum());
             other->useKnife(used);

@@ -16,6 +16,8 @@
 #include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QWidget>
 #include "mygraphicsview.h"
+#include <QMediaPlayer>
+#include <QAudioOutput>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

@@ -17,6 +17,8 @@
 #include "myitem.h"
 #include <QGraphicsItem>
 #include <QPainter>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 
 class HealthBar : public QGraphicsItem {
 public:

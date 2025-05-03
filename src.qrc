@@ -8,5 +8,10 @@
         <file>figs/boots.png</file>
         <file>figs/heart.png</file>
         <file>figs/slime.png</file>
+        <file>musics/background.mp3</file>
+        <file>musics/pickup.mp3</file>
+        <file>musics/clash.mp3</file>
+        <file>musics/death.mp3</file>
+        <file>musics/hurt.mp3</file>
     </qresource>
 </RCC>
