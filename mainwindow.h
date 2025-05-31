@@ -43,10 +43,8 @@ signals:
      */
     // 当开始界面窗口的按钮被按下时, 会触发这个信号
     // 这里对应步骤(1), 定义一个信号
-    void evokeGameSignal();
 
 private slots:
-    void on_pushButton_clicked();
     void handleShowBtnToMenu();
 
 private:

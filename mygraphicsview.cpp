@@ -40,7 +40,7 @@ void MyGraphicsView::playMusic(enum MUSIC_TYPE type){
     }
     player->play();
 }
-void MyGraphicsView::handleEvokeGameSignal() { this->show(); }
+// void MyGraphicsView::handleEvokeGameSignal() { this->show(); }
 
 
 MyGraphicsView::MyGraphicsView(QGraphicsScene *scene, QWidget *parent)

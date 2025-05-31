@@ -48,7 +48,6 @@ private:
 public slots:
     // 处理信号, 展示游戏窗口
     // 这里对应步骤(2)
-    void handleEvokeGameSignal();
 
     // 更新运动圆形的路径
     // void updateCirclePath();
