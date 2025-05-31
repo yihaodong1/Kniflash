@@ -44,5 +44,29 @@ void Npc::updatePos(){
         this->scenePos() + this->boundingRect().center() + ds).length();
     if(distance < 1800 / 2){
         this->setPos(this->pos() + ds);
+    }else{
+        QPointF dsup(0, -step), dsdown(0, step), dsleft(-step, 0), dsright(step, 0);
+        qreal distanceup = QLineF(parentItem()->scenePos()+parentItem()->boundingRect().center(),
+            this->scenePos() + this->boundingRect().center() + dsup).length(),
+              distancedown = QLineF(parentItem()->scenePos()+parentItem()->boundingRect().center(),
+            this->scenePos() + this->boundingRect().center() + dsdown).length(),
+              distanceleft = QLineF(parentItem()->scenePos()+parentItem()->boundingRect().center(),
+            this->scenePos() + this->boundingRect().center() + dsleft).length(),
+              distanceright = QLineF(parentItem()->scenePos()+parentItem()->boundingRect().center(),
+            this->scenePos() + this->boundingRect().center() + dsright).length()
+        ;
+        if(distanceup < 1800/2){
+            this->setPos(this->pos() + dsup);
+            return;
+        }else if(distancedown < 1800/2){
+            this->setPos(this->pos() + dsdown);
+            return;
+        }else if(distanceleft < 1800/2){
+            this->setPos(this->pos() + dsleft);
+            return;
+        }else if(distanceright < 1800/2){
+            this->setPos(this->pos() + dsright);
+            return;
+        }
     }
 }

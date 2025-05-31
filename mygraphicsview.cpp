@@ -120,20 +120,26 @@ MyGraphicsView::MyGraphicsView(QGraphicsScene *scene, QWidget *parent)
     for(int i = 0; i < 10; i++){
         items.push_back(new MyItem(MyItem::KNIFE, m_background));
         // items[i]->setPos(rand()%(int)scene->width(), rand()%(int)scene->height());
-        items[i]->setPos(scene->width() / 2 + sqrt(rand()%(radius * radius)) * cos(rand()%100 / (double)100 * M_PI * 2),
-            scene->height() / 2 + sqrt(rand()%(radius * radius)) * sin(rand()%100 / (double)100 * M_PI * 2));
+        int r = sqrt(rand()%(radius * radius));
+        int angle = rand()%360 / (double)360 * M_PI * 2;
+        items[i]->setPos(scene->width() / 2 + r * cos(angle),
+            scene->height() / 2 + r * sin(angle));
     }
     for(int i = 10; i < 13; i++){
         items.push_back(new MyItem(MyItem::SPEED, m_background));
         // items[i]->setPos(rand()%(int)scene->width(), rand()%(int)scene->height());
-        items[i]->setPos(scene->width() / 2 + sqrt(rand()%(radius * radius)) * cos(rand()%100 / (double)100 * M_PI * 2),
-            scene->height() / 2 + sqrt(rand()%(radius * radius)) * sin(rand()%100 / (double)100 * M_PI * 2));
+        int r = sqrt(rand()%(radius * radius));
+        int angle = rand()%360 / (double)360 * M_PI * 2;
+        items[i]->setPos(scene->width() / 2 + r * cos(angle),
+            scene->height() / 2 + r * sin(angle));
     }
     for(int i = 13; i < 16; i++){
         items.push_back(new MyItem(MyItem::HP, m_background));
         // items[i]->setPos(rand()%(int)scene->width(), rand()%(int)scene->height());
-        items[i]->setPos(scene->width() / 2 + sqrt(rand()%(radius*radius)) * cos(rand()%100 / (double)100 * M_PI * 2),
-            scene->height() / 2 + sqrt(rand()%(radius*radius)) * sin(rand()%100 / (double)100 * M_PI * 2));
+        int r = sqrt(rand()%(radius * radius));
+        int angle = rand()%360 / (double)360 * M_PI * 2;
+        items[i]->setPos(scene->width() / 2 + r * cos(angle),
+            scene->height() / 2 + r * sin(angle));
     }
     
     // 加载人物 GIF
@@ -164,7 +170,11 @@ MyGraphicsView::MyGraphicsView(QGraphicsScene *scene, QWidget *parent)
 
     for(int i = 0; i < 5; i++){
         npcs.push_back(new Npc(m_background));
-        npcs[i]->setPos(rand()%(int)scene->width(), rand()%(int)scene->height());
+        int r = sqrt(rand()%(radius * radius));
+        int angle = rand()%360 / (double)360 * M_PI * 2;
+        npcs[i]->setPos(scene->width() / 2 + r * cos(angle),
+            scene->height() / 2 + r * sin(angle));
+        // npcs[i]->setPos(rand()%(int)scene->width(), rand()%(int)scene->height());
     }
 
     QPen pen(Qt::red, 6);
@@ -291,11 +301,14 @@ void MyGraphicsView::freshItem(Character *c){
         if(l<50){
             playMusic(PICKUP);
             switch(it->getKind()){
-                case MyItem::KNIFE:
-                    it->setPos(scene()->width() / 2 + sqrt(rand()%(radius*radius)) * cos(rand()%100 / (double)100 * M_PI * 2),
-                        scene()->height() / 2 + sqrt(rand()%(radius*radius)) * sin(rand()%100 / (double)100 * M_PI * 2));
+                case MyItem::KNIFE:{
+                    int r = sqrt(rand()%(radius * radius));
+                    int angle = rand()%360 / (double)360 * M_PI * 2;
+                    it->setPos(scene()->width() / 2 + r * cos(angle),
+                        scene()->height() / 2 + r * sin(angle));
                     c->knifeNumAdder();
                     break;
+                }
                 case MyItem::SPEED:
                     items.removeAll(it);
                     delete it;
