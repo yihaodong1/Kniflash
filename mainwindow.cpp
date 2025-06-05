@@ -3,7 +3,6 @@
 // 这个头文件是哪来的? 为什么需要 include 它? 头文件里的内容是什么意思?
 // #include "ui_mainwindow.h"
 
-void MainWindow::handleShowBtnToMenu(){btnToMenu->show();qDebug()<<1;}
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     // , ui(new Ui::MainWindow)
@@ -37,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
         if(stack->count() == 2){
             QWidget *page = stack->widget(1); // 获取索引1的页面
             stack->removeWidget(page);        // 从stack里移除
-            delete page;                              // 删除页面对象，释放内存
+            delete page;                      // 删除上局游戏页面对象，释放内存
         }
         QWidget* game = new QWidget;
         QStackedLayout* layout2 = new QStackedLayout(game);

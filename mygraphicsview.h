@@ -33,9 +33,6 @@ private:
     QTimer m_update;// 更新游戏总体逻辑
     QTimer m_closeAttackTimer;// 每秒近战最多消耗5把飞刀
     QTimer m_npcRangedAttackTimer;// 人机每秒向锁定的角色发射飞刀
-    const int SQUARE_SIZE = 500;  // 运动轨迹正方形边长
-    int currentEdge = 0;          // 当前所在轨迹边（0-3）
-    QPointF initPoint;
 
     QGraphicsLineItem* trace;
     int totalseconds = 0;
